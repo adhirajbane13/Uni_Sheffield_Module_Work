@@ -6,18 +6,18 @@ numshapes = 2
 shapes = []
 
 for n in range(numshapes):
-    shapes.append(Square(frame,40))
-    shapes.append(Square(frame,30))
-    shapes.append(Diamond(frame,40))
-    shapes.append(Circle(frame,40))
+    shapes.append(Square(frame, 40))
+    shapes.append(Square(frame, 30))
+    shapes.append(Diamond(frame, 40))
+    shapes.append(Circle(frame, 40))
 
-while not frame.quit:
+while True:
+    frame.graphics_update()
     for shape in shapes:
-        shape.moveTick()
+        shape.move_tick()
 
-    for i in range(1,len(shapes)):
+    for i in range(1, len(shapes)):
         for j in range(i):
             shapes[i].check_collide(shapes[j])
 
-frame.close()
 

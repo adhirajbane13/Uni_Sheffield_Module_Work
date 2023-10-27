@@ -1,11 +1,11 @@
 
-from MovingShapes import *
+from MovingShapes import Circle, Square, Diamond, Frame
 
 frame = Frame()
-shape1 = Square(frame,100)
+shape1 = Square(frame, 40)
+shape1.goto_curr_xy()
 
-while not frame.quit:
-    shape1.moveTick()
-
-frame.close()
+while True:
+    frame.graphics_update()
+    shape1.move_tick()
 
