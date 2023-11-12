@@ -1,0 +1,2 @@
+python chinese_segmentation.py chinesetrad_wordlist.utf8 chinesetext.utf8 MYRESULTS.utf8
+python eval_chinese_segmentation.py chinesetext_goldstandard.utf8 MYRESULTS.utf8

@@ -55,13 +55,6 @@ stemmer = PorterStemmer().stem
 def stem_word(word):
     return stemmer(word)
 
-stem = False
-bin = False
-if '-p' in opts:
-    stem = True
-
-if '-b' in opts:
-    bin = True
 
 ##############################
 # COUNT-WORDS function. 
@@ -72,25 +65,14 @@ def count_words(filename, stops):
     counts = {}
     infile = open(filename)
     file_list = list(infile)
-    if not stem:
-        for i in range(len(file_list)):
-            k = file_list[i].split()
-            for j in range(len(k)):
-                if k[j] != '\n'and k[j] not in counts.keys() and k[j] not in stops:
-                    counts[k[j]] = 1
-                elif k[j] in counts.keys():
-                    counts[k[j]] = counts[k[j]] + 1
-        return counts
-    elif stem:
-        for i in range(len(file_list)):
-            k = file_list[i].split()
-            for j in range(len(k)):
-                word = stem_word(k[j])
-                if word != '\n'and word not in counts.keys() and word not in stops:
-                    counts[word] = 1
-                elif word in counts.keys():
-                    counts[word] = counts[word] + 1
-        return counts
+    for i in range(len(file_list)):
+        k = file_list[i].split()
+        for j in range(len(k)):
+            if k[j] != '\n'and k[j] not in counts.keys() and k[j] not in stops:
+                counts[k[j]] = 1
+            elif k[j] in counts.keys():
+                counts[k[j]] = counts[k[j]] + 1
+    return counts
         
 
 ##############################
@@ -110,14 +92,8 @@ def jaccard(doc1, doc2):
     list1 = list(doc1.keys())
     list2 = list(doc2.keys())
 
-    if not bin:
-        score = min(len(list1),len(list2))/max(len(list1),len(list2))
-        return score
-    elif bin:
-        set1 = set(list1)
-        set2 = set(list2)
-        score = len(set1.intersection(set2))/len(set1.union(set2))
-        return score
+    score = min(len(list1),len(list2))/max(len(list1),len(list2))
+    return score
     
 
 ##############################
