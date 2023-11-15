@@ -173,11 +173,26 @@ def testBayes(sentencesTest, dataName, pWordPos, pWordNeg, pWord,pPos):
                 totalpospred+=1
                 if PRINT_ERRORS:
                     print ("ERROR (neg classed as pos %0.2f):" %prob + sentence)
+    
+    confusion_matrix(correctpos,totalpospred,correctneg,totalnegpred)
+
  
  
 # TODO for Step 2: Add some code here to calculate and print: (1) accuracy; (2) precision and recall for the positive class; 
 # (3) precision and recall for the negative class; (4) F1 score;
- 
+def confusion_matrix(cp,tppred,cn,tnpred):
+    truepos = cp
+    trueneg = cn
+    falsepos = tppred - cp
+    falseneg = tnpred - cn
+    accuracy = (truepos +trueneg)/(truepos+falsepos+trueneg+falseneg)
+    print('Accuracy =',accuracy)
+    precision = truepos/(truepos+falsepos)
+    print('Precision =',precision)
+    recall = truepos/(truepos+falseneg)
+    print('Recall =',recall)
+    f1_score = (2*precision*recall)/(precision+recall)
+    print('F1 score =',f1_score)
 
 
 
@@ -222,13 +237,9 @@ def testDictionary(sentencesTest, dataName, sentimentDictionary, threshold):
             else:
                 correct+=0
                 totalpospred+=1
- 
-    
+     
 # TODO for Step 5: Add some code here to calculate and print: (1) accuracy; (2) precision and recall for the positive class; 
 # (3) precision and recall for the negative class; (4) F1 score;
- 
-
-
 
 #Print out n most useful predictors
 def mostUseful(pWordPos, pWordNeg, pWord, n):
@@ -269,9 +280,9 @@ trainBayes(sentencesTrain, pWordPos, pWordNeg, pWord)
 
 #run naive bayes classifier on datasets
 print ("Naive Bayes")
-#testBayes(sentencesTrain,  "Films (Train Data, Naive Bayes)\t", pWordPos, pWordNeg, pWord,0.5)
+testBayes(sentencesTrain,  "Films (Train Data, Naive Bayes)\t", pWordPos, pWordNeg, pWord,0.5)
 testBayes(sentencesTest,  "Films  (Test Data, Naive Bayes)\t", pWordPos, pWordNeg, pWord,0.5)
-#testBayes(sentencesNokia, "Nokia   (All Data,  Naive Bayes)\t", pWordPos, pWordNeg, pWord,0.7)
+testBayes(sentencesNokia, "Nokia   (All Data,  Naive Bayes)\t", pWordPos, pWordNeg, pWord,0.7)
 
 
 
