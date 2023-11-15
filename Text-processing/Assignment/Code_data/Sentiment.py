@@ -237,6 +237,8 @@ def testDictionary(sentencesTest, dataName, sentimentDictionary, threshold):
             else:
                 correct+=0
                 totalpospred+=1
+
+    confusion_matrix(correctpos,totalpospred,correctneg,totalnegpred)
      
 # TODO for Step 5: Add some code here to calculate and print: (1) accuracy; (2) precision and recall for the positive class; 
 # (3) precision and recall for the negative class; (4) F1 score;
@@ -256,7 +258,53 @@ def mostUseful(pWordPos, pWordNeg, pWord, n):
     print (head)
     print ("\nPOSITIVE:")
     print (tail)
+    poscount = 0
+    negcount = 0
+    for i in head:
+        if i in sentimentDictionary:
+            poscount+=1
+    for i in tail:
+        if i in sentimentDictionary:
+            negcount+=1
+    
+    print('Number of words in the Sentiment Dictionary:',(poscount+negcount))
 
+#Rule-Based System
+def rbs(sentencesTest, dataName, sentimentDictionary, threshold):
+    total=0
+    correct=0
+    totalpos=0
+    totalneg=0
+    totalpospred=0
+    totalnegpred=0
+    correctpos=0
+    correctneg=0
+    neg_words = ['NOT','not','Not']
+    for sentence, sentiment in sentencesTest.items():
+        Words = re.findall(r"[\w']+", sentence)
+        score=0
+        for word in Words:
+            if word in neg_words:
+
+        total+=1
+        if sentiment=="positive":
+            totalpos+=1
+            if score>=threshold:
+                correct+=1
+                correctpos+=1
+                totalpospred+=1
+            else:
+                correct+=0
+                totalnegpred+=1
+        else:
+            totalneg+=1
+            if score<threshold:
+                correct+=1
+                correctneg+=1
+                totalnegpred+=1
+            else:
+                correct+=0
+                totalpospred+=1
 
 
 
@@ -287,13 +335,14 @@ testBayes(sentencesNokia, "Nokia   (All Data,  Naive Bayes)\t", pWordPos, pWordN
 
 
 #run sentiment dictionary based classifier on datasets
-#testDictionary(sentencesTrain,  "Films (Train Data, Rule-Based)\t", sentimentDictionary, -4)
-#testDictionary(sentencesTest,  "Films  (Test Data, Rule-Based)\t",  sentimentDictionary, -4)
-#testDictionary(sentencesNokia, "Nokia   (All Data, Rule-Based)\t",  sentimentDictionary, -3)
+print('\n')
+testDictionary(sentencesTrain,  "Films (Train Data, Rule-Based)\t", sentimentDictionary, -4)
+testDictionary(sentencesTest,  "Films  (Test Data, Rule-Based)\t",  sentimentDictionary, -4)
+testDictionary(sentencesNokia, "Nokia   (All Data, Rule-Based)\t",  sentimentDictionary, -3)
 
 
 # print most useful words
-#mostUseful(pWordPos, pWordNeg, pWord, 100)
+mostUseful(pWordPos, pWordNeg, pWord, 100)
 
 
 
