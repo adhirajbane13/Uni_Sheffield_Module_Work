@@ -187,12 +187,15 @@ def confusion_matrix(cp,tppred,cn,tnpred):
     falseneg = tnpred - cn
     accuracy = (truepos +trueneg)/(truepos+falsepos+trueneg+falseneg)
     print('Accuracy =',accuracy)
-    precision = truepos/(truepos+falsepos)
-    print('Precision =',precision)
-    recall = truepos/(truepos+falseneg)
-    print('Recall =',recall)
-    f1_score = (2*precision*recall)/(precision+recall)
-    print('F1 score =',f1_score)
+    precision_pos = truepos/(truepos+falsepos)
+    precision_neg = trueneg/(trueneg+falseneg)
+    print('Precision for positive =',precision_pos,'\nPrecision for negative =',precision_neg)
+    recall_pos = truepos/(truepos+falseneg)
+    recall_neg = trueneg/(trueneg+falsepos)
+    print('Recall for positive =',recall_pos,'\nRecall for negative =',recall_neg)
+    f1_score_pos = (2*precision_pos*recall_pos)/(precision_pos+recall_pos)
+    f1_score_neg = (2*precision_neg*recall_neg)/(precision_neg+recall_neg)
+    print('F1-score for positive =',f1_score_pos,'\nF1-score for negative =',f1_score_neg)
     print('\n')
 
 
@@ -280,15 +283,15 @@ def rbs(sentencesTest, dataName, sentimentDictionary, threshold):
     totalnegpred=0
     correctpos=0
     correctneg=0
-    neg_words = ['NOT','not','Not','never,no']
-    intensifier_dict = {'very':1,'extremely':2,'definitely':2}
+    neg_words = ['NOT','not','Not','never','no']
+    intensifier_dict = {'very':1,'extremely':1,'definitely':1}
     diminisher_list = ["somewhat", "barely", "rarely","marginally","fairly","partially"]
     for sentence, sentiment in sentencesTest.items():
         Words = re.findall(r"[\w']+", sentence)
         score=0
         for word in Words:
             if word in sentimentDictionary:
-                score = sentimentDictionary[word]
+                score += sentimentDictionary[word]
                 left_nh = Words[0:Words.index(word)]
                 right_nh = Words[Words.index(word)+1:len(Words)]
                 for neg_word in neg_words:
@@ -299,7 +302,7 @@ def rbs(sentencesTest, dataName, sentimentDictionary, threshold):
                         score += 1
                     else:
                         score -= 1
-                if '!!!' in left_nh or '!!!' in right_nh:
+                if '!!!' in left_nh or '!!!' in right_nh or '!!' in left_nh or '!!' in right_nh or '!' in left_nh or '!' in right_nh:
                     if sentimentDictionary[word] == 1:
                         score += 2
                     else:
@@ -336,7 +339,6 @@ def rbs(sentencesTest, dataName, sentimentDictionary, threshold):
             else:
                 correct+=0
                 totalpospred+=1
-
     confusion_matrix(correctpos,totalpospred,correctneg,totalnegpred)
 
 #---------- Main Script --------------------------

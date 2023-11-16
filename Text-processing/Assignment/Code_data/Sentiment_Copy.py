@@ -187,12 +187,16 @@ def confusion_matrix(cp,tppred,cn,tnpred):
     falseneg = tnpred - cn
     accuracy = (truepos +trueneg)/(truepos+falsepos+trueneg+falseneg)
     print('Accuracy =',accuracy)
-    precision = truepos/(truepos+falsepos)
-    print('Precision =',precision)
-    recall = truepos/(truepos+falseneg)
-    print('Recall =',recall)
-    f1_score = (2*precision*recall)/(precision+recall)
-    print('F1 score =',f1_score)
+    precision_pos = truepos/(truepos+falsepos)
+    precision_neg = trueneg/(trueneg+falseneg)
+    print('Precision for positive =',precision_pos,'\nPrecision for negative =',precision_neg)
+    recall_pos = truepos/(truepos+falseneg)
+    recall_neg = trueneg/(trueneg+falsepos)
+    print('Recall for positive =',recall_pos,'\nRecall for negative =',recall_neg)
+    f1_score_pos = (2*precision_pos*recall_pos)/(precision_pos+recall_pos)
+    f1_score_neg = (2*precision_neg*recall_neg)/(precision_neg+recall_neg)
+    print('F1-score for positive =',f1_score_pos,'\nF1-score for negative =',f1_score_neg)
+    print('\n')
 
 
 
@@ -267,7 +271,7 @@ def mostUseful(pWordPos, pWordNeg, pWord, n):
         if i in sentimentDictionary:
             tailcount+=1
     
-    print('Number of words in the Sentiment Dictionary:',(poscount+negcount))
+    print('Number of words in the Sentiment Dictionary:',(headcount+tailcount))
 
 #Rule-Based System
 def rbs(sentencesTest, dataName, sentimentDictionary, threshold):
@@ -279,47 +283,40 @@ def rbs(sentencesTest, dataName, sentimentDictionary, threshold):
     totalnegpred=0
     correctpos=0
     correctneg=0
-    neg_words = ['NOT','not','Not','never,no']
-    intensifier_dict = {'very':1,'extremely':2,'definitely':2}
+    neg_words = ['NOT','not','Not','never','no']
+    intensifier_dict = {'very':1,'extremely':1,'definitely':1}
     diminisher_list = ["somewhat", "barely", "rarely","marginally","fairly","partially"]
-    emoticon_dict = {'\U0001F642':2,'\U0001F641':-2}
     for sentence, sentiment in sentencesTest.items():
         Words = re.findall(r"[\w']+", sentence)
-        Words.extend(re.findall(r"[\U00010000-\U0010ffff]+", sentence))
         score=0
         for word in Words:
             if word in sentimentDictionary:
                 score = sentimentDictionary[word]
-                left_nh = Words[0:Words.index(word)]
-                right_nh = Words[Words.index(word)+1:len(Words)]
                 for neg_word in neg_words:
-                    if neg_word in left_nh or neg_word in right_nh:
+                    if neg_word in Words:
                         score = -1*(score-1)
                 if (word.isupper()):
                     if sentimentDictionary[word] == 1:
                         score += 1
                     else:
                         score -= 1
-                if '!!!' in left_nh or '!!!' in right_nh:
+                if '!!!' in Words or '!!' in Words or '!' in Words:
                     if sentimentDictionary[word] == 1:
                         score += 2
                     else:
                         score -= 2
                 for ins_word in intensifier_dict:
-                    if ins_word in left_nh or ins_word in right_nh:
+                    if ins_word in Words:
                         if sentimentDictionary[word] == 1:
                             score = score + intensifier_dict[ins_word]
                         else:
                             score = score - intensifier_dict[ins_word]
                 for dim_word in diminisher_list:
-                    if dim_word in left_nh or dim_word in right_nh:
+                    if dim_word in Words:
                         if sentimentDictionary[word] == 1:
                             score = score - 1
                         else:
                             score = score + 1
-                for emo in emoticon_dict:
-                    if emo in left_nh or emo in right_nh:
-                        score = score + emoticon_list[emo]
                 
         total+=1
         if sentiment=="positive":
@@ -340,7 +337,6 @@ def rbs(sentencesTest, dataName, sentimentDictionary, threshold):
             else:
                 correct+=0
                 totalpospred+=1
-
     confusion_matrix(correctpos,totalpospred,correctneg,totalnegpred)
 
 #---------- Main Script --------------------------
@@ -370,17 +366,16 @@ testBayes(sentencesNokia, "Nokia   (All Data,  Naive Bayes)\t", pWordPos, pWordN
 
 
 #run sentiment dictionary based classifier on datasets
-print('\n')
 print('Test Dictionary')
 testDictionary(sentencesTrain,  "Films (Train Data, Rule-Based)\t", sentimentDictionary, -4)
 testDictionary(sentencesTest,  "Films  (Test Data, Rule-Based)\t",  sentimentDictionary, -4)
 testDictionary(sentencesNokia, "Nokia   (All Data, Rule-Based)\t",  sentimentDictionary, -3)
 
-print('\n')
+#run rule based classifier
 print('Rule-based system')
-rbs(sentencesTrain,  "Films (Train Data, Rule-Based)\t", sentimentDictionary, -4)
-rbs(sentencesTest,  "Films  (Test Data, Rule-Based)\t",  sentimentDictionary, -4)
-rbs(sentencesNokia, "Nokia   (All Data, Rule-Based)\t",  sentimentDictionary, -3)
+rbs(sentencesTrain,  "Films (Train Data, Rule-Based)\t", sentimentDictionary, -2)
+rbs(sentencesTest,  "Films  (Test Data, Rule-Based)\t",  sentimentDictionary, -1.5)
+rbs(sentencesNokia, "Nokia   (All Data, Rule-Based)\t",  sentimentDictionary, -1.5)
 
 # print most useful words
 mostUseful(pWordPos, pWordNeg, pWord, 100)
