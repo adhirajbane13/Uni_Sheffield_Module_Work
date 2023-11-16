@@ -20,12 +20,19 @@ def readFiles(sentimentDictionary,sentencesTrain,sentencesTest,sentencesNokia):
 
     negSentencesNokia = open('nokia-neg.txt', 'r', encoding="ISO-8859-1")
     negSentencesNokia = re.split(r'\n', negSentencesNokia.read())
- 
-    posDictionary = open('positive-words.txt', 'r', encoding="ISO-8859-1")
-    posWordList = re.findall(r"[a-z\-]+", posDictionary.read())
 
-    negDictionary = open('negative-words.txt', 'r', encoding="ISO-8859-1")
-    negWordList = re.findall(r"[a-z\-]+", negDictionary.read())
+    with open('positive-words.txt', 'r', encoding="ISO-8859-1") as posDictionary:
+        posWordList = []
+        for line in posDictionary:
+            if not line.startswith(';'):
+                posWordList.extend(re.findall(r"[a-z\-]+", line))
+    posWordList.remove('a')
+
+    with open('negative-words.txt', 'r', encoding="ISO-8859-1") as negDictionary:
+        negWordList = []
+        for line in negDictionary:
+            if not line.startswith(';'):
+                negWordList.extend(re.findall(r"[a-z\-]+", line))
 
     for i in posWordList:
         sentimentDictionary[i] = 1
@@ -173,9 +180,7 @@ def testBayes(sentencesTest, dataName, pWordPos, pWordNeg, pWord,pPos):
                 totalpospred+=1
                 if PRINT_ERRORS:
                     print ("ERROR (neg classed as pos %0.2f):" %prob + sentence)
-    
     confusion_matrix(correctpos,totalpospred,correctneg,totalnegpred)
-
  
  
 # TODO for Step 2: Add some code here to calculate and print: (1) accuracy; (2) precision and recall for the positive class; 
@@ -196,7 +201,7 @@ def confusion_matrix(cp,tppred,cn,tnpred):
     f1_score_pos = (2*precision_pos*recall_pos)/(precision_pos+recall_pos)
     f1_score_neg = (2*precision_neg*recall_neg)/(precision_neg+recall_neg)
     print('F1-score for positive =',f1_score_pos,'\nF1-score for negative =',f1_score_neg)
-    print('\n')
+    print('\n') 
 
 
 
@@ -241,11 +246,14 @@ def testDictionary(sentencesTest, dataName, sentimentDictionary, threshold):
             else:
                 correct+=0
                 totalpospred+=1
-
     confusion_matrix(correctpos,totalpospred,correctneg,totalnegpred)
-     
+ 
+    
 # TODO for Step 5: Add some code here to calculate and print: (1) accuracy; (2) precision and recall for the positive class; 
 # (3) precision and recall for the negative class; (4) F1 score;
+ 
+
+
 
 #Print out n most useful predictors
 def mostUseful(pWordPos, pWordNeg, pWord, n):
@@ -284,35 +292,37 @@ def rbs(sentencesTest, dataName, sentimentDictionary, threshold):
     correctpos=0
     correctneg=0
     neg_words = ['NOT','not','Not','never','no']
-    intensifier_dict = {'very':1,'extremely':1,'definitely':1}
+    intensifier_dict = {'very':1,'extremely':2,'definitely':2}
     diminisher_list = ["somewhat", "barely", "rarely","marginally","fairly","partially"]
     for sentence, sentiment in sentencesTest.items():
         Words = re.findall(r"[\w']+", sentence)
         score=0
         for word in Words:
             if word in sentimentDictionary:
-                score = sentimentDictionary[word]
+                score += sentimentDictionary[word]
+                left_nh = Words[0:Words.index(word)]
+                right_nh = Words[Words.index(word)+1:len(Words)]
                 for neg_word in neg_words:
-                    if neg_word in Words:
+                    if neg_word in left_nh:
                         score = -1*(score-1)
                 if (word.isupper()):
                     if sentimentDictionary[word] == 1:
                         score += 1
                     else:
                         score -= 1
-                if '!!!' in Words or '!!' in Words or '!' in Words:
+                if '!!!' in left_nh or '!!!' in right_nh or '!!' in left_nh or '!!' in right_nh or '!' in left_nh or '!' in right_nh:
                     if sentimentDictionary[word] == 1:
                         score += 2
                     else:
                         score -= 2
                 for ins_word in intensifier_dict:
-                    if ins_word in Words:
+                    if ins_word in left_nh or ins_word in right_nh:
                         if sentimentDictionary[word] == 1:
                             score = score + intensifier_dict[ins_word]
                         else:
                             score = score - intensifier_dict[ins_word]
                 for dim_word in diminisher_list:
-                    if dim_word in Words:
+                    if dim_word in left_nh or dim_word in right_nh:
                         if sentimentDictionary[word] == 1:
                             score = score - 1
                         else:
@@ -366,16 +376,16 @@ testBayes(sentencesNokia, "Nokia   (All Data,  Naive Bayes)\t", pWordPos, pWordN
 
 
 #run sentiment dictionary based classifier on datasets
-print('Test Dictionary')
-testDictionary(sentencesTrain,  "Films (Train Data, Rule-Based)\t", sentimentDictionary, -4)
-testDictionary(sentencesTest,  "Films  (Test Data, Rule-Based)\t",  sentimentDictionary, -4)
-testDictionary(sentencesNokia, "Nokia   (All Data, Rule-Based)\t",  sentimentDictionary, -3)
+print('Dictionary based Classifier')
+testDictionary(sentencesTrain,  "Films (Train Data, Rule-Based)\t", sentimentDictionary, 1)
+testDictionary(sentencesTest,  "Films  (Test Data, Rule-Based)\t",  sentimentDictionary, 1)
+testDictionary(sentencesNokia, "Nokia   (All Data, Rule-Based)\t",  sentimentDictionary, 1)
 
 #run rule based classifier
 print('Rule-based system')
-rbs(sentencesTrain,  "Films (Train Data, Rule-Based)\t", sentimentDictionary, -2)
-rbs(sentencesTest,  "Films  (Test Data, Rule-Based)\t",  sentimentDictionary, -1.5)
-rbs(sentencesNokia, "Nokia   (All Data, Rule-Based)\t",  sentimentDictionary, -1.5)
+rbs(sentencesTrain,  "Films (Train Data, Rule-Based)\t", sentimentDictionary, 1)
+rbs(sentencesTest,  "Films  (Test Data, Rule-Based)\t",  sentimentDictionary, 1)
+rbs(sentencesNokia, "Nokia   (All Data, Rule-Based)\t",  sentimentDictionary, 1)
 
 # print most useful words
 mostUseful(pWordPos, pWordNeg, pWord, 100)
