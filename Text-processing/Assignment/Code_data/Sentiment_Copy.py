@@ -193,7 +193,6 @@ def confusion_matrix(cp,tppred,cn,tnpred):
     print('Recall =',recall)
     f1_score = (2*precision*recall)/(precision+recall)
     print('F1 score =',f1_score)
-    print('\n')
 
 
 
@@ -268,7 +267,7 @@ def mostUseful(pWordPos, pWordNeg, pWord, n):
         if i in sentimentDictionary:
             tailcount+=1
     
-    print('Number of words in the Sentiment Dictionary:',(headcount+tailcount))
+    print('Number of words in the Sentiment Dictionary:',(poscount+negcount))
 
 #Rule-Based System
 def rbs(sentencesTest, dataName, sentimentDictionary, threshold):
@@ -283,8 +282,10 @@ def rbs(sentencesTest, dataName, sentimentDictionary, threshold):
     neg_words = ['NOT','not','Not','never,no']
     intensifier_dict = {'very':1,'extremely':2,'definitely':2}
     diminisher_list = ["somewhat", "barely", "rarely","marginally","fairly","partially"]
+    emoticon_dict = {'\U0001F642':2,'\U0001F641':-2}
     for sentence, sentiment in sentencesTest.items():
         Words = re.findall(r"[\w']+", sentence)
+        Words.extend(re.findall(r"[\U00010000-\U0010ffff]+", sentence))
         score=0
         for word in Words:
             if word in sentimentDictionary:
@@ -316,6 +317,9 @@ def rbs(sentencesTest, dataName, sentimentDictionary, threshold):
                             score = score - 1
                         else:
                             score = score + 1
+                for emo in emoticon_dict:
+                    if emo in left_nh or emo in right_nh:
+                        score = score + emoticon_list[emo]
                 
         total+=1
         if sentiment=="positive":
@@ -366,12 +370,13 @@ testBayes(sentencesNokia, "Nokia   (All Data,  Naive Bayes)\t", pWordPos, pWordN
 
 
 #run sentiment dictionary based classifier on datasets
+print('\n')
 print('Test Dictionary')
 testDictionary(sentencesTrain,  "Films (Train Data, Rule-Based)\t", sentimentDictionary, -4)
 testDictionary(sentencesTest,  "Films  (Test Data, Rule-Based)\t",  sentimentDictionary, -4)
 testDictionary(sentencesNokia, "Nokia   (All Data, Rule-Based)\t",  sentimentDictionary, -3)
 
-#run rule based classifier
+print('\n')
 print('Rule-based system')
 rbs(sentencesTrain,  "Films (Train Data, Rule-Based)\t", sentimentDictionary, -4)
 rbs(sentencesTest,  "Films  (Test Data, Rule-Based)\t",  sentimentDictionary, -4)
