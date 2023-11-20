@@ -180,17 +180,18 @@ def testBayes(sentencesTest, dataName, pWordPos, pWordNeg, pWord,pPos):
                 totalpospred+=1
                 if PRINT_ERRORS:
                     print ("ERROR (neg classed as pos %0.2f):" %prob + sentence)
-    confusion_matrix(correctpos,totalpospred,correctneg,totalnegpred)
+    confusion_matrix(correctpos,totalpospred,correctneg,totalnegpred,dataName)
  
  
 # TODO for Step 2: Add some code here to calculate and print: (1) accuracy; (2) precision and recall for the positive class; 
 # (3) precision and recall for the negative class; (4) F1 score;
-def confusion_matrix(cp,tppred,cn,tnpred):
+def confusion_matrix(cp,tppred,cn,tnpred,dataname):
     truepos = cp
     trueneg = cn
     falsepos = tppred - cp
     falseneg = tnpred - cn
     accuracy = (truepos +trueneg)/(truepos+falsepos+trueneg+falseneg)
+    print('Performance Metrics for',dataname)
     print('Accuracy =',accuracy)
     precision_pos = truepos/(truepos+falsepos)
     precision_neg = trueneg/(trueneg+falseneg)
@@ -246,7 +247,7 @@ def testDictionary(sentencesTest, dataName, sentimentDictionary, threshold):
             else:
                 correct+=0
                 totalpospred+=1
-    confusion_matrix(correctpos,totalpospred,correctneg,totalnegpred)
+    confusion_matrix(correctpos,totalpospred,correctneg,totalnegpred,dataName)
  
     
 # TODO for Step 5: Add some code here to calculate and print: (1) accuracy; (2) precision and recall for the positive class; 
@@ -310,7 +311,7 @@ def rbs(sentencesTest, dataName, sentimentDictionary, threshold):
                         score += 1
                     else:
                         score -= 1
-                if '!!!' in left_nh or '!!!' in right_nh or '!!' in left_nh or '!!' in right_nh or '!' in left_nh or '!' in right_nh:
+                if '!!!' in right_nh or '!!' in right_nh or '!' in right_nh:
                     if sentimentDictionary[word] == 1:
                         score += 2
                     else:
@@ -347,7 +348,7 @@ def rbs(sentencesTest, dataName, sentimentDictionary, threshold):
             else:
                 correct+=0
                 totalpospred+=1
-    confusion_matrix(correctpos,totalpospred,correctneg,totalnegpred)
+    confusion_matrix(correctpos,totalpospred,correctneg,totalnegpred,dataName)
 
 #---------- Main Script --------------------------
 
@@ -368,24 +369,24 @@ pWord={}    # p(W)
 trainBayes(sentencesTrain, pWordPos, pWordNeg, pWord)
 
 #run naive bayes classifier on datasets
-print ("Naive Bayes")
-testBayes(sentencesTrain,  "Films (Train Data, Naive Bayes)\t", pWordPos, pWordNeg, pWord,0.5)
-testBayes(sentencesTest,  "Films  (Test Data, Naive Bayes)\t", pWordPos, pWordNeg, pWord,0.5)
-testBayes(sentencesNokia, "Nokia   (All Data,  Naive Bayes)\t", pWordPos, pWordNeg, pWord,0.7)
+print ("\x1B[4m" + "Naive Bayes" + "\x1B[0m" +":")
+testBayes(sentencesTrain,  "Film(Train Data, Naive Bayes)\t", pWordPos, pWordNeg, pWord,0.5)
+testBayes(sentencesTest,  "Films(Test Data, Naive Bayes)\t", pWordPos, pWordNeg, pWord,0.5)
+testBayes(sentencesNokia, "Nokia(All Data,  Naive Bayes)\t", pWordPos, pWordNeg, pWord,0.7)
 
 
 
 #run sentiment dictionary based classifier on datasets
-print('Dictionary based Classifier')
-testDictionary(sentencesTrain,  "Films (Train Data, Rule-Based)\t", sentimentDictionary, 1)
-testDictionary(sentencesTest,  "Films  (Test Data, Rule-Based)\t",  sentimentDictionary, 1)
-testDictionary(sentencesNokia, "Nokia   (All Data, Rule-Based)\t",  sentimentDictionary, 1)
+print("\x1B[4m" + 'Dictionary based Classifier' + "\x1B[0m" +":")
+testDictionary(sentencesTrain,  "Film(Train Data, Dictionary-Based)\t", sentimentDictionary, 1)
+testDictionary(sentencesTest,  "Films(Test Data, Dictionary-Based)\t",  sentimentDictionary, 1)
+testDictionary(sentencesNokia, "Nokia(All Data, Dictionary-Based)\t",  sentimentDictionary, 1)
 
 #run rule based classifier
-print('Rule-based system')
-rbs(sentencesTrain,  "Films (Train Data, Rule-Based)\t", sentimentDictionary, 1)
-rbs(sentencesTest,  "Films  (Test Data, Rule-Based)\t",  sentimentDictionary, 1)
-rbs(sentencesNokia, "Nokia   (All Data, Rule-Based)\t",  sentimentDictionary, 1)
+print("\x1B[4m" + 'Rule-based system' + "\x1B[0m" +":")
+rbs(sentencesTrain,  "Films(Train Data, Rule-Based)\t", sentimentDictionary, 0)
+rbs(sentencesTest,  "Films(Test Data, Rule-Based)\t",  sentimentDictionary, 0)
+rbs(sentencesNokia, "Nokia(All Data, Rule-Based)\t",  sentimentDictionary, 0)
 
 # print most useful words
 mostUseful(pWordPos, pWordNeg, pWord, 100)
