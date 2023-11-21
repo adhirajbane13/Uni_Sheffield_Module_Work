@@ -293,7 +293,7 @@ def rbs(sentencesTest, dataName, sentimentDictionary, threshold):
     correctpos=0
     correctneg=0
     neg_words = ['NOT','not','Not','never','no']
-    intensifier_dict = {'very':1,'extremely':2,'definitely':2}
+    intensifier_dict = {'very':1,'extremely':2,'definitely':2,'utterly':2,'absolutely':2,'incredibly':1}
     diminisher_list = ["somewhat", "barely", "rarely","marginally","fairly","partially"]
     for sentence, sentiment in sentencesTest.items():
         Words = re.findall(r"[\w']+", sentence)
