@@ -305,7 +305,7 @@ def rbs(sentencesTest, dataName, sentimentDictionary, threshold):
                 right_nh = Words[Words.index(word)+1:len(Words)]
                 for neg_word in neg_words:
                     if neg_word in left_nh:
-                        score = -1*(score-1)
+                        score += -1*(score-1)
                 if (word.isupper()):
                     if sentimentDictionary[word] == 1:
                         score += 1
