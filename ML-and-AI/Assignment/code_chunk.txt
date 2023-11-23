@@ -1,0 +1,11 @@
+xtest = []
+ytest = []
+
+#To avoid xtest and xtrain having same values, i.e., avoiding circular analysis
+for x in x1:
+    if x not in xtrain:
+        xtest.append(x)
+        ytest.append(y1[np.argwhere(x1 == x)[0][0]])
+
+xtest = np.array(xtest)
+ytest = np.array(ytest)
