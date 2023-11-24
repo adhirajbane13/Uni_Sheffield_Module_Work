@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import re, random, math, collections, itertools
 
-PRINT_ERRORS=0
+PRINT_ERRORS=1
 
 #------------- Function Definitions ---------------------
 
