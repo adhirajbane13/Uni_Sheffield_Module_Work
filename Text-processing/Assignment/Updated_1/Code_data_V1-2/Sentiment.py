@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import re, random, math, collections, itertools
 
-PRINT_ERRORS=1
+PRINT_ERRORS=0
 
 #------------- Function Definitions ---------------------
 
@@ -192,16 +192,16 @@ def confusion_matrix(cp,tppred,cn,tnpred,dataname):
     falseneg = tnpred - cn
     accuracy = (truepos +trueneg)/(truepos+falsepos+trueneg+falseneg)
     print('Performance Metrics for',dataname)
-    print('Accuracy =',accuracy)
+    print(f'Accuracy = {accuracy*100:0.2f}%')
     precision_pos = truepos/(truepos+falsepos)
     precision_neg = trueneg/(trueneg+falseneg)
-    print('Precision for positive =',precision_pos,'\nPrecision for negative =',precision_neg)
+    print(f'Precision for positive = {precision_pos*100:0.2f}%',f'\nPrecision for negative = {precision_neg*100:0.2f}%')
     recall_pos = truepos/(truepos+falseneg)
     recall_neg = trueneg/(trueneg+falsepos)
-    print('Recall for positive =',recall_pos,'\nRecall for negative =',recall_neg)
+    print(f'Recall for positive = {recall_pos*100:0.2f}%',f'\nRecall for negative = {recall_neg*100:0.2f}&')
     f1_score_pos = (2*precision_pos*recall_pos)/(precision_pos+recall_pos)
     f1_score_neg = (2*precision_neg*recall_neg)/(precision_neg+recall_neg)
-    print('F1-score for positive =',f1_score_pos,'\nF1-score for negative =',f1_score_neg)
+    print(f'F1-score for positive = {f1_score_pos*100:0.2f}%',f'\nF1-score for negative = {f1_score_neg*100:0.2f}%')
     print('\n') 
 
 
@@ -283,7 +283,7 @@ def mostUseful(pWordPos, pWordNeg, pWord, n):
     print('Number of words in the Sentiment Dictionary:',(headcount+tailcount))
 
 #Rule-Based System
-def rbs(sentencesTest, dataName, sentimentDictionary, threshold):
+def rulebs(sentencesTest, dataName, sentimentDictionary, threshold):
     total=0
     correct=0
     totalpos=0
@@ -384,9 +384,9 @@ testDictionary(sentencesNokia, "Nokia(All Data, Dictionary-Based)\t",  sentiment
 
 #run rule based classifier
 print("\x1B[4m" + 'Rule-based system' + "\x1B[0m" +":")
-rbs(sentencesTrain,  "Films(Train Data, Rule-Based)\t", sentimentDictionary, 0)
-rbs(sentencesTest,  "Films(Test Data, Rule-Based)\t",  sentimentDictionary, 0)
-rbs(sentencesNokia, "Nokia(All Data, Rule-Based)\t",  sentimentDictionary, 0)
+rulebs(sentencesTrain,  "Films(Train Data, Rule-Based)\t", sentimentDictionary, 0)
+rulebs(sentencesTest,  "Films(Test Data, Rule-Based)\t",  sentimentDictionary, 0)
+rulebs(sentencesNokia, "Nokia(All Data, Rule-Based)\t",  sentimentDictionary, 0)
 
 # print most useful words
 mostUseful(pWordPos, pWordNeg, pWord, 100)
