@@ -238,6 +238,8 @@ def testDictionary(sentencesTest, dataName, sentimentDictionary, threshold):
             else:
                 correct+=0
                 totalnegpred+=1
+                if PRINT_ERRORS:
+                    print ("ERROR (pos classed as neg %0.2f):" %score + sentence)
         else:
             totalneg+=1
             if score<threshold:
@@ -247,6 +249,8 @@ def testDictionary(sentencesTest, dataName, sentimentDictionary, threshold):
             else:
                 correct+=0
                 totalpospred+=1
+                if PRINT_ERRORS:
+                    print ("ERROR (neg classed as pos %0.2f):" %score + sentence)
     confusion_matrix(correctpos,totalpospred,correctneg,totalnegpred,dataName)
  
     
@@ -282,7 +286,7 @@ def mostUseful(pWordPos, pWordNeg, pWord, n):
     
     print('Number of words in the Sentiment Dictionary:',(headcount+tailcount))
 
-#Rule-Based System
+#Improved Rule-Based System
 def rulebs(sentencesTest, dataName, sentimentDictionary, threshold):
     total=0
     correct=0
@@ -293,7 +297,8 @@ def rulebs(sentencesTest, dataName, sentimentDictionary, threshold):
     correctpos=0
     correctneg=0
     neg_words = ['NOT','not','Not','never','no']
-    intensifier_dict = {'very':1,'extremely':2,'definitely':2,'utterly':2,'absolutely':2,'incredibly':1}
+    intensifier_dict = {'very':1,'extremely':2,'definitely':2,'utterly':2,'absolutely':2,
+                        'incredibly':1}
     diminisher_list = ["somewhat", "barely", "rarely","marginally","fairly","partially"]
     for sentence, sentiment in sentencesTest.items():
         Words = re.findall(r"[\w']+", sentence)
@@ -383,10 +388,10 @@ testDictionary(sentencesTest,  "Films(Test Data, Dictionary-Based)\t",  sentimen
 testDictionary(sentencesNokia, "Nokia(All Data, Dictionary-Based)\t",  sentimentDictionary, 1)
 
 #run rule based classifier
-print("\x1B[4m" + 'Rule-based system' + "\x1B[0m" +":")
-rulebs(sentencesTrain,  "Films(Train Data, Rule-Based)\t", sentimentDictionary, 0)
-rulebs(sentencesTest,  "Films(Test Data, Rule-Based)\t",  sentimentDictionary, 0)
-rulebs(sentencesNokia, "Nokia(All Data, Rule-Based)\t",  sentimentDictionary, 0)
+print("\x1B[4m" + 'Improved Rule-based system' + "\x1B[0m" +":")
+rulebs(sentencesTrain,  "Films(Train Data, Rule-Based)\t", sentimentDictionary, 1)
+rulebs(sentencesTest,  "Films(Test Data, Rule-Based)\t",  sentimentDictionary, 1)
+rulebs(sentencesNokia, "Nokia(All Data, Rule-Based)\t",  sentimentDictionary, 1)
 
 # print most useful words
 mostUseful(pWordPos, pWordNeg, pWord, 100)
