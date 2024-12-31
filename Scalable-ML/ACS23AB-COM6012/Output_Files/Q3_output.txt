@@ -1,0 +1,14 @@
+Sample Data Random Forest AUC: 0.7755397193764979, Accuracy: 0.7019222009656555
+Sample Data Gradient Boosting Trees AUC: 0.790622295260898, Accuracy: 0.7139473444474811
+Sample Data Neural Network AUC: 0.7425010110334724, Accuracy: 0.6831556891682609
+
+Random Forest Best Hyper-Parameters:
+ {'numTrees': 10, 'maxDepth': 10, 'maxBins': 50}
+Gradient Boosting Trees Best Hyper-Parameters:
+ {'maxIter': 30, 'maxDepth': 5, 'stepSize': 0.2}
+Neural Network Best Hyper-Parameters:
+ {'layers': [28, 5, 5, 2], 'maxIter': 100, 'blockSize': 20}
+
+Random Forest AUC: 0.7777832344226786, Accuracy: 0.7046864204955552
+Gradient Boosting Trees AUC: 0.7960838647608264, Accuracy: 0.7194198037638353
+Neural Network AUC: 0.7505244230997254, Accuracy: 0.6879971256366593

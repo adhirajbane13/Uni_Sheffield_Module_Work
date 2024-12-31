@@ -1,0 +1,54 @@
+Setting        Split     RMSE      MSE       MAE       
+ALS Setting 1  40%     0.8052    0.6483    0.6195    
+ALS Setting 1  60%     0.7774    0.6044    0.5924    
+ALS Setting 1  80%     0.7957    0.6331    0.6023    
+ALS Setting 2  40%     0.8051    0.6481    0.6209    
+ALS Setting 2  60%     0.7782    0.6057    0.5945    
+ALS Setting 2  80%     0.7957    0.6332    0.6031    
+
+Top 5 Cluster Sizes Across Three Splits
+Split          Cluster 1   Cluster 2   Cluster 3   Cluster 4   Cluster 5
+Split 1(40%)        5042        4238        4219        3752        3748
+Split 2(60%)        5520        5424        5399        5163        5060
+Split 3(80%)        7080        6742        6416        6229        5926
+
+Top 10 Genres for Each Split
+
+Top Genres for Split 1:
+Genre                    Count
+Drama                       57
+Comedy                      27
+Thriller                    19
+Crime                       15
+Romance                     14
+Action                      11
+Adventure                    9
+Mystery                      8
+War                          8
+Horror                       6
+
+Top Genres for Split 2:
+Genre                    Count
+Drama                      405
+Comedy                     173
+Romance                    122
+Thriller                    85
+Adventure                   84
+Crime                       84
+Documentary                 72
+Action                      69
+War                         66
+Mystery                     42
+
+Top Genres for Split 3:
+Genre                    Count
+Drama                     1394
+Comedy                     542
+Romance                    367
+Crime                      263
+Thriller                   257
+Documentary                245
+War                        157
+Adventure                  156
+Action                     142
+Mystery                    123

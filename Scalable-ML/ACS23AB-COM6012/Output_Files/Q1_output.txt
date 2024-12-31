@@ -1,0 +1,39 @@
+Germany (.de): 21345
+Canada (.ca): 58290
+Singapore (.sg): 1057
+Country: DE, Unique Hosts: 1138
+Top 9 Hosts:
+host62.ascend.interop.eunet.de, Requests: 832
+aibn32.astro.uni-bonn.de, Requests: 642
+ns.scn.de, Requests: 523
+www.rrz.uni-koeln.de, Requests: 423
+ztivax.zfe.siemens.de, Requests: 387
+sun7.lrz-muenchen.de, Requests: 280
+relay.ccs.muc.debis.de, Requests: 275
+dws.urz.uni-magdeburg.de, Requests: 244
+relay.urz.uni-heidelberg.de, Requests: 239
+----------------------------------------
+Country: CA, Unique Hosts: 2970
+Top 9 Hosts:
+ottgate2.bnr.ca, Requests: 1718
+freenet.edmonton.ab.ca, Requests: 782
+bianca.osc.on.ca, Requests: 511
+alize.ere.umontreal.ca, Requests: 479
+pcrb.ccrs.emr.ca, Requests: 461
+srv1.freenet.calgary.ab.ca, Requests: 362
+ccn.cs.dal.ca, Requests: 351
+oncomdis.on.ca, Requests: 304
+cobain.arcs.bcit.bc.ca, Requests: 289
+----------------------------------------
+Country: SG, Unique Hosts: 78
+Top 9 Hosts:
+merlion.singnet.com.sg, Requests: 308
+sunsite.nus.sg, Requests: 40
+ts900-1314.singnet.com.sg, Requests: 30
+ssc25.iscs.nus.sg, Requests: 30
+scctn02.sp.ac.sg, Requests: 25
+ts900-1305.singnet.com.sg, Requests: 25
+ts900-406.singnet.com.sg, Requests: 25
+ts900-402.singnet.com.sg, Requests: 24
+einstein.technet.sg, Requests: 23
+----------------------------------------
